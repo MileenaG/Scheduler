@@ -60,13 +60,13 @@ def main():
 	types = [t[6] for t in target_data]
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg)) #returns list or array from astropy
 
-	for i in range(len(observatory_telescopes)):   #loops over evreything in the observatories dictionary 
+	for i in range(len(observatory_telescopes)):   #loops over everything in the observatories dictionary 
 		
 		targets = []                               #empty list
 		obs = observatories[obs_keys[i]]
 
 		for j in range(len(names)):
-
+f
 			target_type = None
 			disc_date = None
 
@@ -78,6 +78,9 @@ def main():
 				disc_date = parse(disc_dates[j])
 			elif types[j] == "SN":
 				target_type = TargetType.Supernova
+				disc_date = parse(disc_dates[j])
+			elif types[j] == "GW":
+				target_type = TargetType.GW
 				disc_date = parse(disc_dates[j])
 			else:
 				raise ValueError('Unrecognized target type!')

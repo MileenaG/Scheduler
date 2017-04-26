@@ -90,7 +90,8 @@ class Swope(Telescope):
         self.exp_funcs = {
             TargetType.Supernova: self.compute_sn_exposure,
             TargetType.Template: self.compute_template_exposure,
-            TargetType.Standard: self.compute_standard_exposure
+            TargetType.Standard: self.compute_standard_exposure,
+            TargetType.GW: self.compute_GW_exposure
         }
     
     def set_targets(self, targets):
@@ -98,7 +99,19 @@ class Swope(Telescope):
         
     def get_targets(self):
         return self.targets
+
+    def compute_GW_exposure(self, GW):
+        exposures = {}
+        exposures.update({Constants.u_band: 120})
+        exposures.update({Constants.B_band: 120})
+        exposures.update({Constants.V_band: 120})
+        exposures.update({Constants.g_band: 120})
+        exposures.update({Constants.r_band: 120})
+        exposures.update({Constants.i_band: 120})
+        
+        GW.exposures = exposures
     
+
     def compute_sn_exposure(self, sn):
         exposures = {}
         
@@ -289,7 +302,8 @@ class Nickel(Telescope):
         self.exp_funcs = {
             TargetType.Supernova: self.compute_sn_exposure,
             TargetType.Template: self.compute_template_exposure,
-            TargetType.Standard: self.compute_standard_exposure
+            TargetType.Standard: self.compute_standard_exposure,
+   	    TargetType.GW: self.compute_GW_exposure
         }
     
     def set_targets(self, targets):
@@ -298,6 +312,15 @@ class Nickel(Telescope):
     def get_targets(self):
         return self.targets
     
+    def compute_GW_exposure(self, GW):
+        exposures = {}
+        exposures.update({Constants.B_band: 120})
+        exposures.update({Constants.V_band: 120})
+        exposures.update({Constants.r_prime: 120})
+        exposures.update({Constants.i_prime: 120})
+        
+        GW.exposures = exposures
+
     def compute_sn_exposure(self, sn):
         exposures = {}
         
