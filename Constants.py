@@ -1,6 +1,7 @@
 # Constants
 airmass_threshold = 2.0 # relative airmass
 round_to = 30 # seconds
+exposure_time=120
 
 # Filter constants
 u_band = 'u'

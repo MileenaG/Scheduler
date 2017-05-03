@@ -102,12 +102,12 @@ class Swope(Telescope):
 
     def compute_GW_exposure(self, GW):
         exposures = {}
-        exposures.update({Constants.u_band: 120})
-        exposures.update({Constants.B_band: 120})
-        exposures.update({Constants.V_band: 120})
-        exposures.update({Constants.g_band: 120})
-        exposures.update({Constants.r_band: 120})
-        exposures.update({Constants.i_band: 120})
+        exposures.update({Constants.u_band: exposure_time})
+        exposures.update({Constants.B_band: exposure_time})
+        exposures.update({Constants.V_band: exposure_time})
+        exposures.update({Constants.g_band: exposure_time})
+        exposures.update({Constants.r_band: exposure_time})
+        exposures.update({Constants.i_band: exposure_time})
         
         GW.exposures = exposures
     
@@ -314,10 +314,10 @@ class Nickel(Telescope):
     
     def compute_GW_exposure(self, GW):
         exposures = {}
-        exposures.update({Constants.B_band: 120})
-        exposures.update({Constants.V_band: 120})
-        exposures.update({Constants.r_prime: 120})
-        exposures.update({Constants.i_prime: 120})
+        exposures.update({Constants.B_band: exposure_time})
+        exposures.update({Constants.V_band: exposure_time})
+        exposures.update({Constants.r_prime: exposure_time})
+        exposures.update({Constants.i_prime: exposure_time})
         
         GW.exposures = exposures
 
