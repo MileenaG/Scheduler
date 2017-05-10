@@ -49,14 +49,14 @@ def main():
 	)
 #Literal Dictionary
 	observatories = {"LCO":lco, "Lick":lick}   #"LCO" string #lco is a variable observatory object
-
-	target_data = get_targets("%s" % file_name)
+    #columns in input csv file
+	target_data = get_targets("%s" % file_name)    #parsing data 
 	names = [t[0] for t in target_data]
 	ra = [t[1] for t in target_data]
 	dec = [t[2] for t in target_data]
 	priorities = [float(t[3]) for t in target_data]
-	disc_dates = [t[4] for t in target_data]
-	disc_mags = [float(t[5]) for t in target_data]
+	#disc_dates = [t[4] for t in target_data]
+	#disc_mags = [float(t[5]) for t in target_data] 
 	types = [t[6] for t in target_data]
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg)) #returns list or array from astropy
 
@@ -81,7 +81,7 @@ f
 				disc_date = parse(disc_dates[j])
 			elif types[j] == "GW":
 				target_type = TargetType.GW
-				disc_date = parse(disc_dates[j])
+				disc_date = parse(disc_dates[j])  #parse input for value in column 
 			else:
 				raise ValueError('Unrecognized target type!')
 
@@ -95,7 +95,8 @@ f
 					sidereal_radian_array=obs.sidereal_radian_array, 
 					disc_date=disc_date, 
 					apparent_mag=disc_mags[j], 
-					obs_date=obs.obs_date
+					obs_date=obs.obs_date,
+					static_eposure_time=
 				)
 			)
 

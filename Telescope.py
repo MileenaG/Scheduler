@@ -58,7 +58,7 @@ class Telescope(metaclass=ABCMeta):
                 if (frac_exp_time == 0.0):
                     frac_exp_time = 1.0
 
-                total_prob += frac_p*frac_time*frac_exp_time
+                total_prob += frac_p*frac_time*frac_exp_time                        #priority = (probability)^-1
 
             for t in targets:
 
@@ -102,11 +102,12 @@ class Swope(Telescope):
 
     def compute_GW_exposure(self, GW):
         exposures = {}
-        exposures.update({Constants.u_band: exposure_time})
-        exposures.update({Constants.B_band: exposure_time})
-        exposures.update({Constants.V_band: exposure_time})
+        exposure_time=120
+
+        if static_exposure_time if not None:
+            exposure_time=GW.static_exposure_time
+
         exposures.update({Constants.g_band: exposure_time})
-        exposures.update({Constants.r_band: exposure_time})
         exposures.update({Constants.i_band: exposure_time})
         
         GW.exposures = exposures
@@ -314,6 +315,7 @@ class Nickel(Telescope):
     
     def compute_GW_exposure(self, GW):
         exposures = {}
+        exposure_time=120
         exposures.update({Constants.B_band: exposure_time})
         exposures.update({Constants.V_band: exposure_time})
         exposures.update({Constants.r_prime: exposure_time})

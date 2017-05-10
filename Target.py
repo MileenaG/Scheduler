@@ -10,7 +10,7 @@ class TargetType(Enum):
 
 class Target:
     def __init__(self, name, coord, priority, target_type, observatory_lat, sidereal_radian_array, \
-                 disc_date=None, apparent_mag=None, obs_date=None):
+                 disc_date=None, apparent_mag=None, obs_date=None, static_exposure_time=None):
         # Provided by Constructor
         self.name = name
         self.coord = coord
@@ -33,6 +33,7 @@ class Target:
         self.total_good_air_mass = 9999 # Proxy for elevation
         self.scheduled_time_array = None # Airmass plot abscissa
         self.scheduled_airmass_array = None # Airmass plot ordinate
+        self.static_exposure_time = static_exposure_time
     
     def compute_airmass(self, observatory_lat, sidereal_radian_array):
         n = len(sidereal_radian_array)
