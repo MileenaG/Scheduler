@@ -54,11 +54,11 @@ def main():
 	names = [t[0] for t in target_data]
 	ra = [t[1] for t in target_data]
 	dec = [t[2] for t in target_data]
-	priorities = [float(t[3]) for t in target_data]
-	disc_dates = [t[4] for t in target_data]
-	disc_mags = [float(t[5]) for t in target_data] 
-	types = [t[6] for t in target_data]
-	static_exp_times = [t[7] for t in target_data]
+	priorities = [float(t[4]) for t in target_data]
+	disc_dates = [t[5] for t in target_data]
+	disc_mags = [float(t[6]) for t in target_data] 
+	types = [t[7] for t in target_data]
+	static_exp_times = [t[8] for t in target_data]
 
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg)) #returns list or array from astropy
 
