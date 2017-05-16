@@ -104,7 +104,7 @@ class Swope(Telescope):
         exposures = {}
         exposure_time=120
 
-        if static_exposure_time if not None:
+        if GW.static_exposure_time is not None:
             exposure_time=GW.static_exposure_time
 
         exposures.update({Constants.g_band: exposure_time})
@@ -317,13 +317,11 @@ class Nickel(Telescope):
         exposures = {}
         exposure_time=120
 
-        if static_exposure_time if not None:
+        if GW.static_exposure_time is not None:
             exposure_time=GW.static_exposure_time
 
         exposures.update({Constants.B_band: exposure_time})
         exposures.update({Constants.V_band: exposure_time})
-        exposures.update({Constants.r_prime: exposure_time})
-        exposures.update({Constants.i_prime: exposure_time})
         
         GW.exposures = exposures
 

@@ -55,9 +55,11 @@ def main():
 	ra = [t[1] for t in target_data]
 	dec = [t[2] for t in target_data]
 	priorities = [float(t[3]) for t in target_data]
-	#disc_dates = [t[4] for t in target_data]
-	#disc_mags = [float(t[5]) for t in target_data] 
+	disc_dates = [t[4] for t in target_data]
+	disc_mags = [float(t[5]) for t in target_data] 
 	types = [t[6] for t in target_data]
+	static_exp_times = [t[7] for t in target_data]
+
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg)) #returns list or array from astropy
 
 	for i in range(len(observatory_telescopes)):   #loops over everything in the observatories dictionary 
@@ -96,8 +98,8 @@ f
 					disc_date=disc_date, 
 					apparent_mag=disc_mags[j], 
 					obs_date=obs.obs_date,
-					static_eposure_time=          #what do I add here?
-				)
+					static_exposure_time=static_exposure_time[j] 
+									)
 			)
 
 			obs.telescopes[tele_keys[i]].set_targets(targets) #reference to the vaules in the obervatory object 
