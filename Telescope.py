@@ -316,6 +316,10 @@ class Nickel(Telescope):
     def compute_GW_exposure(self, GW):
         exposures = {}
         exposure_time=120
+
+        if static_exposure_time if not None:
+            exposure_time=GW.static_exposure_time
+
         exposures.update({Constants.B_band: exposure_time})
         exposures.update({Constants.V_band: exposure_time})
         exposures.update({Constants.r_prime: exposure_time})

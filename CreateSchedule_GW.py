@@ -81,7 +81,7 @@ f
 				disc_date = parse(disc_dates[j])
 			elif types[j] == "GW":
 				target_type = TargetType.GW
-				disc_date = parse(disc_dates[j])  #parse input for value in column 
+				disc_date = parse(disc_dates[j])  
 			else:
 				raise ValueError('Unrecognized target type!')
 
@@ -96,7 +96,7 @@ f
 					disc_date=disc_date, 
 					apparent_mag=disc_mags[j], 
 					obs_date=obs.obs_date,
-					static_eposure_time=
+					static_eposure_time=          #what do I add here?
 				)
 			)
 
