@@ -58,7 +58,7 @@ def main():
 	disc_dates = [t[5] for t in target_data]
 	disc_mags = [float(t[6]) for t in target_data] 
 	types = [t[7] for t in target_data]
-	static_exp_times = [t[8] for t in target_data]
+	static_exposure_time = [t[8] for t in target_data]
 
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg)) #returns list or array from astropy
 
@@ -68,10 +68,8 @@ def main():
 		obs = observatories[obs_keys[i]]
 
 		for j in range(len(names)):
-f
 			target_type = None
 			disc_date = None
-
 			if types[j] == "STD":
 				target_type = TargetType.Standard
 				disc_date = None

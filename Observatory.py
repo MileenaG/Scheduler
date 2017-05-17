@@ -62,7 +62,7 @@ class Observatory():
         
         print("%s - %s deg Twilight Ends: %s" % (self.name, np.abs(self.ephemeris.horizon), self.local_begin_night))
         print("%s - %s deg Dawn Begins: %s" % (self.name, np.abs(self.ephemeris.horizon), self.local_end_night))
-        print(self.sidereal_radian_array)     #new
+        #print(self.sidereal_radian_array)     #new
 
     def is_contiguous(self, int_array):
         i = iter(int_array)

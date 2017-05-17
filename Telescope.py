@@ -101,7 +101,7 @@ class Swope(Telescope):
         return self.targets
 
     def compute_GW_exposure(self, GW):
-        exposures = {}
+        exposures = {}    #Dictionary
         exposure_time=120
 
         if GW.static_exposure_time is not None:
@@ -259,7 +259,7 @@ class Swope(Telescope):
                     output_rows.append(tgt_row)
 
                     # Start in riguVB order
-                    output_rows.append(self.swope_filter_row(Constants.r_band, t.exposures[Constants.r_band]))
+                   # output_rows.append(self.swope_filter_row(Constants.r_band, t.exposures[Constants.r_band]))
                     output_rows.append(self.swope_filter_row(Constants.i_band, t.exposures[Constants.i_band]))
                     output_rows.append(self.swope_filter_row(Constants.g_band, t.exposures[Constants.g_band]))
                     last_filter = Constants.g_band
@@ -318,7 +318,7 @@ class Nickel(Telescope):
         exposure_time=120
 
         if GW.static_exposure_time is not None:
-            exposure_time=GW.static_exposure_time
+            exposure_time=int(GW.static_exposure_time)
 
         exposures.update({Constants.B_band: exposure_time})
         exposures.update({Constants.V_band: exposure_time})
