@@ -54,11 +54,14 @@ def main():
 	names = [t[0] for t in target_data]
 	ra = [t[1] for t in target_data]
 	dec = [t[2] for t in target_data]
-	priorities = [float(t[4]) for t in target_data]
-	disc_dates = [t[5] for t in target_data]
-	disc_mags = [float(t[6]) for t in target_data] 
-	types = [t[7] for t in target_data]
-	static_exposure_time = [t[8] for t in target_data]
+	priorities = [float(t[3]) for t in target_data]         #I skiped because NearGalCat file includes 2d prob!
+	disc_dates = [t[4] for t in target_data]
+	disc_mags = [float(t[5]) for t in target_data] 
+	types = [t[6] for t in target_data]                        
+	static_exposure_time = [float(t[7]) for t in target_data]
+	EstAbsMag = [float(t[8]) for t in target_data]    #assuing they're 18
+	dist_Mpc = [float(t[9]) for t in target_data]
+
 
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg)) #returns list or array from astropy
 
@@ -79,9 +82,12 @@ def main():
 			elif types[j] == "SN":
 				target_type = TargetType.Supernova
 				disc_date = parse(disc_dates[j])
-			elif types[j] == "GW":
-				target_type = TargetType.GW
+			elif types[j] == "GWS":
+				target_type = TargetType.GWS
 				disc_date = parse(disc_dates[j])  
+			elif types[j] == "GWD":
+				target_type = TargetType.GWD
+				disc_date = parse(disc_dates[j])
 			else:
 				raise ValueError('Unrecognized target type!')
 
@@ -96,7 +102,10 @@ def main():
 					disc_date=disc_date, 
 					apparent_mag=disc_mags[j], 
 					obs_date=obs.obs_date,
-					static_exposure_time=static_exposure_time[j] 
+					static_exposure_time=static_exposure_time[j], 
+					dynamic_exposure_time=dynamic_exposure_time[j],
+					EstAbsMag=EstAbsMag[j],
+					dist_Mpc=dist_Mpc[j]
 									)
 			)
 
@@ -106,7 +115,7 @@ def main():
 		print("First %s target: %s" % (tele_keys[i], targets[0].name))
 		print("Last %s target: %s" % (tele_keys[i], targets[-1].name))
 
-		obs.schedule_targets(tele_keys[i])            #goes thru the next observatory until we've gona thru all of them
+		obs.schedule_targets(tele_keys[i])            #goes thru the next observatory until we've gone thru all of them
 
 	exit = input("\n\nENTER to exit")
 

@@ -91,7 +91,8 @@ class Swope(Telescope):
             TargetType.Supernova: self.compute_sn_exposure,
             TargetType.Template: self.compute_template_exposure,
             TargetType.Standard: self.compute_standard_exposure,
-            TargetType.GW: self.compute_GW_exposure
+            TargetType.GWS: self.compute_GWS_exposure,
+            TargetType.GWD: self.compute_GWD_exposure
         }
     
     def set_targets(self, targets):
@@ -100,17 +101,31 @@ class Swope(Telescope):
     def get_targets(self):
         return self.targets
 
-    def compute_GW_exposure(self, GW):
+    def compute_GWS_exposure(self, GWS):   #static exposure time
         exposures = {}    #Dictionary
         exposure_time=120
 
-        if GW.static_exposure_time is not None:
-            exposure_time=int(GW.static_exposure_time)
+        if GWS.static_exposure_time is not None:
+            exposure_time=GWS.static_exposure_time
 
         exposures.update({Constants.g_band: exposure_time})
         exposures.update({Constants.i_band: exposure_time})
         
-        GW.exposures = exposures
+        GWS.exposures = exposures
+
+    def compute_GWD_exposure(self, GWD):   #dynamic exposure time
+        exposures = {}    #Dictionary
+
+        M_app= GWD.EstAbsMag + 5.0*np.log10(GWD.dist_Mpc*10e6)-5.0   #error EstAbsMag not defined 
+        s_to_n=30
+        g_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.g_band])
+        i_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.i_band])
+
+        exposures.update({Constants.g_band: exposure_time})
+        exposures.update({Constants.i_band: exposure_time})
+        
+        GWD.exposures = exposures
+        print(exposures)
     
 
     def compute_sn_exposure(self, sn):
@@ -304,7 +319,8 @@ class Nickel(Telescope):
             TargetType.Supernova: self.compute_sn_exposure,
             TargetType.Template: self.compute_template_exposure,
             TargetType.Standard: self.compute_standard_exposure,
-   	    TargetType.GW: self.compute_GW_exposure
+   	        TargetType.GWS: self.compute_GWS_exposure,
+            TargetType.GWD: self.compute_GWD_exposure
         }
     
     def set_targets(self, targets):
@@ -313,17 +329,30 @@ class Nickel(Telescope):
     def get_targets(self):
         return self.targets
     
-    def compute_GW_exposure(self, GW):
-        exposures = {}
+    def compute_GWS_exposure(self, GWS):   #static exposure time
+        exposures = {}    #Dictionary
         exposure_time=120
 
-        if GW.static_exposure_time is not None:
-            exposure_time=int(GW.static_exposure_time)
+        if GWS.static_exposure_time is not None:
+            exposure_time=int(GWS.static_exposure_time)
 
-        exposures.update({Constants.B_band: exposure_time})
-        exposures.update({Constants.V_band: exposure_time})
+        exposures.update({Constants.b_band: exposure_time})
+        exposures.update({Constants.v_band: exposure_time})
         
-        GW.exposures = exposures
+        GWS.exposures = exposures
+
+    def compute_GWD_exposure(self, GWD):   #dynamic exposure time
+        exposures = {}    #Dictionary
+        
+        M_app= GWD.EstAbsMag + 5.0*np.log10(GWD.dist_Mpc*10e6)-5.0   #error EstAbsMag not defined 
+        s_to_n=30
+        g_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.b_band])
+        i_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.v_band])
+
+        exposures.update({Constants.b_band: exposure_time})
+        exposures.update({Constants.v_band: exposure_time})
+        
+        GWD.exposures = exposures
 
     def compute_sn_exposure(self, sn):
         exposures = {}

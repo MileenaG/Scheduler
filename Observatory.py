@@ -155,7 +155,7 @@ class Observatory():
         good_targets.sort(key = operator.attrgetter('starting_index'))
         length_of_night = len(self.utc_time_array) # in minutes
 
-        fig = plt.figure(figsize=(10,4))
+        fig = plt.figure(figsize=(10,4))    #make plot adjustments here. Fix line thickness and use less targets.
         ax1 = fig.add_subplot(111)
         ax2 = ax1.twiny()
         ax3 = ax1.twiny()
@@ -194,17 +194,16 @@ class Observatory():
             total_tgts += tgt.total_minutes
             col = next(c)
 
-            ax1.plot(self.local_time_array,tgt.raw_airmass_array,c=col,linewidth=3.0,alpha=0.1)
-            ax1.plot(tgt.scheduled_time_array,tgt.scheduled_airmass_array,c=col,label=lbl,linewidth=3.0)
+            ax1.plot(self.local_time_array,tgt.raw_airmass_array,c=col,linewidth=6.0,alpha=0.09)        #HERE!! #alpha from 0.1 
+            ax1.plot(tgt.scheduled_time_array,tgt.scheduled_airmass_array,c=col,label=lbl,linewidth=6.0) #changed linewidth from 0.3
 
-        leg = ax1.legend(bbox_to_anchor=(1.01, 1.015), loc='upper left', ncol=2, prop={'size':8})
+#        leg = ax1.legend(bbox_to_anchor=(1.01, 1.015), loc='upper left', ncol=2, prop={'size':8})
         # set the linewidth of each legend object
-        for legobj in leg.legendHandles:
-            legobj.set_linewidth(3.0)
+#        for legobj in leg.legendHandles:
+#            legobj.set_linewidth(6.0)
 
         percent1 = 100*float(total_tgts)/float(self.length_of_night)
-        fig.suptitle("%s %s: %s\nOpen Shutter Time: %0.2f%%" % \
-             (self.name, telescope_name, self.obs_date.date(),percent1),y=1.10)
+        fig.suptitle("%s %s: %s\nOpen Shutter Time: %0.2f%%" % (self.name, telescope_name, self.obs_date.date(),percent1),y=1.10)
     
         fig_to_save = "%s_%s_%s_Plot.png" % (self.name, telescope_name, self.obs_date_string)
         fig.savefig(fig_to_save,bbox_inches='tight',dpi=300)

@@ -6,11 +6,12 @@ class TargetType(Enum):
     Supernova = 1
     Template = 2
     Standard = 3
-    GW = 4
+    GWS = 4
+    GWD = 5
 
 class Target:
     def __init__(self, name, coord, priority, target_type, observatory_lat, sidereal_radian_array, \
-                 disc_date=None, apparent_mag=None, obs_date=None, static_exposure_time=None):
+                 disc_date=None, apparent_mag=None, obs_date=None, static_exposure_time=None, dynamic_exposure_time=None, EstAbsMag=None, dist_Mpc=None):
         # Provided by Constructor
         self.name = name
         self.coord = coord
@@ -19,6 +20,11 @@ class Target:
         self.disc_date = disc_date
         self.apparent_mag = apparent_mag
         self.obs_date = obs_date
+        self.static_exposure_time = static_exposure_time
+        self.dynamic_exposure_time = dynamic_exposure_time
+        self.EstAbsMag = EstAbsMag
+        self.dist_Mpc = dist_Mpc
+        self.apparent_mag = apparent_mag
         
         # Computed by Constructor
         self.raw_airmass_array = self.compute_airmass(observatory_lat, sidereal_radian_array)
@@ -33,7 +39,6 @@ class Target:
         self.total_good_air_mass = 9999 # Proxy for elevation
         self.scheduled_time_array = None # Airmass plot abscissa
         self.scheduled_airmass_array = None # Airmass plot ordinate
-        self.static_exposure_time = static_exposure_time
     
     def compute_airmass(self, observatory_lat, sidereal_radian_array):
         n = len(sidereal_radian_array)
