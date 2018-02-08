@@ -108,6 +108,7 @@ class Swope(Telescope):
         if GWS.static_exposure_time is not None:
             exposure_time=GWS.static_exposure_time
 
+ 
         exposures.update({Constants.g_band: exposure_time})
         exposures.update({Constants.i_band: exposure_time})
         
@@ -117,12 +118,14 @@ class Swope(Telescope):
         exposures = {}    #Dictionary
 
         M_app= GWD.EstAbsMag + 5.0*np.log10(GWD.dist_Mpc*10e6)-5.0   #error EstAbsMag not defined 
+        print(M_app)
         s_to_n=30
         g_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.g_band])
         i_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.i_band])
 
-        exposures.update({Constants.g_band: exposure_time})
-        exposures.update({Constants.i_band: exposure_time})
+ 
+        exposures.update({Constants.g_band: g_exp})
+        exposures.update({Constants.i_band: i_exp})
         
         GWD.exposures = exposures
         print(exposures)
@@ -150,13 +153,14 @@ class Swope(Telescope):
         # Specific to Swope -- make Vgri the same length exposure...
         mean_exp = self.round_to_num(Constants.round_to, np.mean([V_exp,g_exp,r_exp,i_exp]))
 
+ 
         exposures.update({Constants.g_band: mean_exp})
         exposures.update({Constants.r_band: mean_exp})
         exposures.update({Constants.i_band: mean_exp})
 
         # Only include these exposures if a relatively new SN
         if days_from_disc < 60:
-            exposures.update({Constants.u_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, adj_app_mag, self.filters[Constants.u_band]))})
+            exposures.update({Cotants.u_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, adj_app_mag, self.filters[Constants.u_band]))})
             exposures.update({Constants.B_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, adj_app_mag, self.filters[Constants.B_band]))})
             exposures.update({Constants.V_band: mean_exp})
 
@@ -174,11 +178,14 @@ class Swope(Telescope):
         s_to_n = 100
         
         # Don't know what the apparent mag should be?
+        
         exposures.update({Constants.u_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.u_band]))})
+        
         exposures.update({Constants.B_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.B_band]))})
         exposures.update({Constants.V_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.V_band]))})
         exposures.update({Constants.g_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.g_band]))})
         exposures.update({Constants.r_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.r_band]))})
+        
         exposures.update({Constants.i_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.i_band]))})
         
         # Finally, for standards round exps and don't go less than 10s, don't go more than 600s on Swope
@@ -252,6 +259,7 @@ class Swope(Telescope):
             header_row.append("Exposure Time")
             output_rows.append(header_row)
 
+ 
             last_filter = Constants.r_band
             for t in targets:
                 ra = t.coord.ra.hms
@@ -269,38 +277,58 @@ class Swope(Telescope):
                     (last_filter == Constants.g_band) or \
                     (last_filter == Constants.B_band and len(t.exposures) < 6):
 
+ 
                     tgt_row.append(Constants.r_band)
                     tgt_row.append(10) # Acquisition in r
                     output_rows.append(tgt_row)
 
                     # Start in riguVB order
-                   # output_rows.append(self.swope_filter_row(Constants.r_band, t.exposures[Constants.r_band]))
-                    output_rows.append(self.swope_filter_row(Constants.i_band, t.exposures[Constants.i_band]))
-                    output_rows.append(self.swope_filter_row(Constants.g_band, t.exposures[Constants.g_band]))
+                    if Constants.r_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.r_band, t.exposures[Constants.r_band]))
+
+                    if Constants.i_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.i_band, t.exposures[Constants.i_band]))
+                    
+                    if Constants.g_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.g_band, t.exposures[Constants.g_band]))
+                    
                     last_filter = Constants.g_band
-                    
+
                     if len(t.exposures) > 3:
-                        output_rows.append(self.swope_filter_row(Constants.u_band, t.exposures[Constants.u_band]))
-                        output_rows.append(self.swope_filter_row(Constants.V_band, t.exposures[Constants.V_band]))
-                        output_rows.append(self.swope_filter_row(Constants.B_band, t.exposures[Constants.B_band]))
+
+                        if Constants.u_band in t.exposures:
+                            output_rows.append(self.swope_filter_row(Constants.u_band, t.exposures[Constants.u_band]))
+
+                        if Constants.V_band in t.exposures:
+                            output_rows.append(self.swope_filter_row(Constants.V_band, t.exposures[Constants.V_band]))
+
+                        if Constants.B_band in t.exposures:
+                            output_rows.append(self.swope_filter_row(Constants.B_band, t.exposures[Constants.B_band]))
+
                         last_filter = Constants.B_band
-                    
+                    #This last_filter business is now complicated... 
                 # Flip order: BVugir
                 else:
                     tgt_row.append(Constants.B_band)
                     tgt_row.append(20) # Acquisition in B
                     output_rows.append(tgt_row)
 
-                    output_rows.append(self.swope_filter_row(Constants.B_band, t.exposures[Constants.B_band]))
-                    output_rows.append(self.swope_filter_row(Constants.V_band, t.exposures[Constants.V_band]))
-                    output_rows.append(self.swope_filter_row(Constants.u_band, t.exposures[Constants.u_band]))
-                    output_rows.append(self.swope_filter_row(Constants.g_band, t.exposures[Constants.g_band]))
-                    output_rows.append(self.swope_filter_row(Constants.i_band, t.exposures[Constants.i_band]))
-                    output_rows.append(self.swope_filter_row(Constants.r_band, t.exposures[Constants.r_band]))
+                    if Constants.B_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.B_band, t.exposures[Constants.B_band]))
+                    if Constants.V_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.V_band, t.exposures[Constants.V_band]))
+                    if Constants.u_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.u_band, t.exposures[Constants.u_band]))
+                    if Constants.g_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.g_band, t.exposures[Constants.g_band]))
+                    if Constants.i_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.i_band, t.exposures[Constants.i_band]))
+                    if Constants.r_band in t.exposures:
+                        output_rows.append(self.swope_filter_row(Constants.r_band, t.exposures[Constants.r_band]))
+                    
                     last_filter = Constants.r_band
                     
             writer.writerows(output_rows)
-
 
 # Used with Lick Observatory
 class Nickel(Telescope):
@@ -336,8 +364,9 @@ class Nickel(Telescope):
         if GWS.static_exposure_time is not None:
             exposure_time=int(GWS.static_exposure_time)
 
-        exposures.update({Constants.b_band: exposure_time})
-        exposures.update({Constants.v_band: exposure_time})
+ 
+        exposures.update({Constants.B_band: exposure_time})
+        exposures.update({Constants.V_band: exposure_time})
         
         GWS.exposures = exposures
 
@@ -346,11 +375,12 @@ class Nickel(Telescope):
         
         M_app= GWD.EstAbsMag + 5.0*np.log10(GWD.dist_Mpc*10e6)-5.0   #error EstAbsMag not defined 
         s_to_n=30
-        g_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.b_band])
-        i_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.v_band])
+        B_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.B_band])
+        V_exp=self.time_to_S_N(s_to_n,M_app,self.filters[Constants.V_band])
 
-        exposures.update({Constants.b_band: exposure_time})
-        exposures.update({Constants.v_band: exposure_time})
+ 
+        exposures.update({Constants.B_band: B_exp})
+        exposures.update({Constants.V_band: V_exp})
         
         GWD.exposures = exposures
 
@@ -395,6 +425,7 @@ class Nickel(Telescope):
         exposures.update({Constants.r_prime: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.r_prime]))})
         exposures.update({Constants.i_prime: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.i_prime]))})
         exposures.update({Constants.B_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.B_band]))})
+        
         exposures.update({Constants.V_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.V_band]))})
         
         # Finally, don't go less than 10s for Nickel std, don't go more than 600s on Nickel
@@ -464,8 +495,9 @@ class Nickel(Telescope):
             header_row.append("Exposure Time")
             output_rows.append(header_row)
 
+
             last_filter = Constants.r_prime
-            for t in targets:                
+            for t in targets:               
                 ra = t.coord.ra.hms
                 dec = t.coord.dec.dms
 
@@ -478,20 +510,26 @@ class Nickel(Telescope):
                 # Last criterion: if previous obj had full 4 filters, but this target only has 2
                 if (last_filter == Constants.r_prime) or \
                    (last_filter == Constants.i_prime) or \
-                    (last_filter == Constants.B_band and len(t.exposures) < 4):
+                    (last_filter == Constants.B_band and len(t.exposures) < 4):   
 
                     tgt_row.append(Constants.r_prime)
                     tgt_row.append(10) # Acquisition in r'
                     output_rows.append(tgt_row)
 
-                    # Start in r'i'VB order
-                    output_rows.append(self.nickel_filter_row(Constants.r_prime, t.exposures[Constants.r_prime]))
-                    output_rows.append(self.nickel_filter_row(Constants.i_prime, t.exposures[Constants.i_prime]))
+                    # Start in riguVB order
+                    if Constants.r_band in t.exposures:
+                        output_rows.append(self.nickel_filter_row(Constants.r_band, t.exposures[Constants.r_prime]))
+
+                    if Constants.i_band in t.exposures:
+                        output_rows.append(self.nickel_filter_row(Constants.i_band, t.exposures[Constants.i_prime]))
                     last_filter = Constants.i_prime
                     
                     if len(t.exposures) > 2:
-                        output_rows.append(self.nickel_filter_row(Constants.V_band, t.exposures[Constants.V_band]))
-                        output_rows.append(self.nickel_filter_row(Constants.B_band, t.exposures[Constants.B_band]))
+
+                        if Constants.V_band in t.exposures:
+                            output_rows.append(self.nickel_filter_row(Constants.V_band, t.exposures[Constants.V_band]))
+                        if Constants.B_band in t.exposures:
+                            output_rows.append(self.nickel_filter_row(Constants.B_band, t.exposures[Constants.B_band]))
                         last_filter = Constants.B_band
                     
                 # Flip order: BVi'r'
@@ -500,10 +538,15 @@ class Nickel(Telescope):
                     tgt_row.append(20) # Acquisition in B
                     output_rows.append(tgt_row)
 
-                    output_rows.append(self.nickel_filter_row(Constants.B_band, t.exposures[Constants.B_band]))
-                    output_rows.append(self.nickel_filter_row(Constants.V_band, t.exposures[Constants.V_band]))
-                    output_rows.append(self.nickel_filter_row(Constants.i_prime, t.exposures[Constants.i_prime]))
-                    output_rows.append(self.nickel_filter_row(Constants.r_prime, t.exposures[Constants.r_prime]))
-                    last_filter = Constants.r_prime
-                    
+                    if Constants.B_band in t.exposures:
+                        output_rows.append(self.nickel_filter_row(Constants.B_band, t.exposures[Constants.B_band]))
+                    if Constants.V_band in t.exposures:
+                        output_rows.append(self.nickel_filter_row(Constants.V_band, t.exposures[Constants.V_band]))
+                    if Constants.i_prime in t.exposures:
+                        output_rows.append(self.nickel_filter_row(Constants.i_band, t.exposures[Constants.i_prime]))
+                    if Constants.r_prime in t.exposures:
+                        output_rows.append(self.nickel_filter_row(Constants.r_band, t.exposures[Constants.r_prime]))
+
+                    last_filter = Constants.r_prime                    
+
             writer.writerows(output_rows)

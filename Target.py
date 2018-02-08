@@ -11,7 +11,7 @@ class TargetType(Enum):
 
 class Target:
     def __init__(self, name, coord, priority, target_type, observatory_lat, sidereal_radian_array, \
-                 disc_date=None, apparent_mag=None, obs_date=None, static_exposure_time=None, dynamic_exposure_time=None, EstAbsMag=None, dist_Mpc=None):
+                 disc_date=None, apparent_mag=None, obs_date=None, static_exposure_time=None, EstAbsMag=None, dist_Mpc=None):
         # Provided by Constructor
         self.name = name
         self.coord = coord
@@ -21,7 +21,7 @@ class Target:
         self.apparent_mag = apparent_mag
         self.obs_date = obs_date
         self.static_exposure_time = static_exposure_time
-        self.dynamic_exposure_time = dynamic_exposure_time
+        #self.dynamic_exposure_time = dynamic_exposure_time
         self.EstAbsMag = EstAbsMag
         self.dist_Mpc = dist_Mpc
         self.apparent_mag = apparent_mag

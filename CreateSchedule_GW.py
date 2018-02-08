@@ -54,13 +54,15 @@ def main():
 	names = [t[0] for t in target_data]
 	ra = [t[1] for t in target_data]
 	dec = [t[2] for t in target_data]
-	priorities = [float(t[3]) for t in target_data]         #I skiped because NearGalCat file includes 2d prob!
+	priorities = [float(t[3]) for t in target_data]         
 	disc_dates = [t[4] for t in target_data]
 	disc_mags = [float(t[5]) for t in target_data] 
 	types = [t[6] for t in target_data]                        
 	static_exposure_time = [float(t[7]) for t in target_data]
 	EstAbsMag = [float(t[8]) for t in target_data]    #assuing they're 18
 	dist_Mpc = [float(t[9]) for t in target_data]
+	#dynamic_exposure_times = [t[10] for t in target_data]
+	#Apparent_Mag = [t[11] for t in target_data]             #empty lists. no data yet
 
 
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg)) #returns list or array from astropy
@@ -81,10 +83,10 @@ def main():
 				disc_date = parse(disc_dates[j])
 			elif types[j] == "SN":
 				target_type = TargetType.Supernova
-				disc_date = parse(disc_dates[j])
+				disc_date = parse(disc_dates[j]) 
 			elif types[j] == "GWS":
 				target_type = TargetType.GWS
-				disc_date = parse(disc_dates[j])  
+				disc_date = parse(disc_dates[j]) 
 			elif types[j] == "GWD":
 				target_type = TargetType.GWD
 				disc_date = parse(disc_dates[j])
@@ -103,7 +105,8 @@ def main():
 					apparent_mag=disc_mags[j], 
 					obs_date=obs.obs_date,
 					static_exposure_time=static_exposure_time[j], 
-					dynamic_exposure_time=dynamic_exposure_time[j],
+					#dynamic_exposure_time=dynamic_exposure_time[j],
+					#Apparent_Mag=Apparent_Mag[j],
 					EstAbsMag=EstAbsMag[j],
 					dist_Mpc=dist_Mpc[j]
 									)
