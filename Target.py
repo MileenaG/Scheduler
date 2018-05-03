@@ -10,7 +10,7 @@ class TargetType(Enum):
     GWD = 5
 
 class Target:
-    def __init__(self, name, coord, priority, target_type, observatory_lat, sidereal_radian_array, \
+    def __init__(self, name, coord, priority, target_type, observatory_lat, sidereal_radian_array,
                  disc_date=None, apparent_mag=None, obs_date=None, static_exposure_time=None, EstAbsMag=None, dist_Mpc=None):
         # Provided by Constructor
         self.name = name
